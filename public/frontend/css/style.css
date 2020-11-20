@@ -629,47 +629,47 @@ a {
 
 /* Background Image */
 .bg-image--1 {
-  background-image: url(../images/bg/1.jpg);
+  background-image: url(" ../images/bg/1.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center center; }
 .bg-image--2 {
-  background-image: url(../images/bg/2.jpg);
+  background-image: url(" ../images/bg/2.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center center; }
 .bg-image--3 {
-  background-image: url(../images/bg/3.jpg);
+  background-image: url("../images/bg/3.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center center; }
 .bg-image--4 {
-  background-image: url((../images/bg/4.jpg);
+  background-image: url("../images/bg/4.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center center; }
 .bg-image--5 {
-  background-image: url(../images/bg/5.jpg);
+  background-image: url("../images/bg/5.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center center; }
 .bg-image--6 {
-  background-image: url(../images/bg/6.jpg);
+  background-image: url("../images/bg/6.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center center; }
 .bg-image--7 {
-  background-image: url(../images/bg/7.jpg);
+  background-image: url("../images/bg/7.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center center; }
 .bg-image--8 {
-  background-image: url(../images/bg/8.jpg);
+  background-image: url("../images/bg/8.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center center; }
 .bg-image--9 {
-  background-image: url(../images/bg/9.jpg);
+  background-image: url("../images/bg/9.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center center; }
@@ -3542,7 +3542,7 @@ h3.widget-title-modal {
 .blog__turquoise .wenro__blog .content h2 a:hover {
   color: #3cc8df; }
 .blog__turquoise .wenro__blog .content .blog__btn:hover {
-  border-color: #3cc8df;
+  border-color: hsl(188, 72%, 55%);
   color: #3cc8df; }
 .yellow--blog .wenro__blog .content h2 a:hover {
   color: #ffa800; }
@@ -3686,7 +3686,7 @@ h3.widget-title-modal {
   box-shadow: 0 5px 15px rgba(85, 85, 85, 0.1);
 }
   .post__itam.item__bg--2 {
-    background: rgba(0, 0, 0, 0) url("images/pos-bg/19.jpeg") no-repeat fixed center center/cover; }
+    background: rgba(0, 0, 0, 0) url("../images/pos-bg/19.jpeg") no-repeat fixed center center/cover; }
 	  .post__itam .content {
 	  background: #fff none repeat scroll 0 0;
 	  display: inline-block;
@@ -3830,7 +3830,7 @@ h3.widget-title-modal {
     letter-spacing: 0.1em;
     text-transform: uppercase; }
   .wn__information .info::before {
-    background: rgba(0, 0, 0, 0) url("images/icons/box.png") no-repeat scroll 0 0;
+    background: rgba(0, 0, 0, 0) url("../images/icons/box.png") no-repeat scroll 0 0;
     bottom: -24px;
     content: "";
     display: inline-block;
@@ -3848,11 +3848,11 @@ h3.widget-title-modal {
     -webkit-transform: translateY(-10px);
             transform: translateY(-10px); }
   .wn__information .info.info11 {
-    background: #a2afc6 url("images/png-img/shipping.png") no-repeat scroll 100% 100%; }
+    background: #a2afc6 url("../images/png-img/shipping.png") no-repeat scroll 100% 100%; }
   .wn__information .info.info12 {
-    background: #c6bba2 url("images/png-img/headphone.png") no-repeat scroll 100% 100%; }
+    background: #c6bba2 url("../images/png-img/headphone.png") no-repeat scroll 100% 100%; }
   .wn__information .info.info13 {
-    background: #a2c6c0 url("images/png-img/payment.png") no-repeat scroll 100% 100%; }
+    background: #a2c6c0 url("../images/png-img/payment.png") no-repeat scroll 100% 100%; }
 
 .plr--0 {
   padding-left: 0px;
@@ -4110,11 +4110,11 @@ h3.widget-title-modal {
   text-align: center;
   width: 40px; }
   .product__info__main .product-addto-links a.wishlist {
-    background: #ffffff url("images/icons/product-info.png") no-repeat scroll 0 0; }
+    background: #ffffff url("../images/icons/product-info.png") no-repeat scroll 0 0; }
   .product__info__main .product-addto-links a.compare {
-    background: #ffffff url("images/icons/button-compare.png") no-repeat scroll 0 0; }
+    background: #ffffff url("../images/icons/button-compare.png") no-repeat scroll 0 0; }
   .product__info__main .product-addto-links a.email {
-    background: #ffffff url("images/icons/button-email.png") no-repeat scroll 0 0; }
+    background: #ffffff url("../images/icons/button-email.png") no-repeat scroll 0 0; }
   .product__info__main .product-addto-links a:hover {
     background-color: #e59285;
     background-position: 100% center;
@@ -4469,7 +4469,7 @@ h3.widget-title-modal {
 	  position:relative;
 	}
 	.blog-details .blog-post-details .post_wrapper .post_content blockquote::before {
-	  background-image: url("images/icons/blog-link-post2.png");
+	  background-image: url("../images/icons/blog-link-post2.png");
 	  background-repeat: no-repeat;
 	  content: "";
 	  height: 100%;
@@ -5092,7 +5092,7 @@ h3.widget-title-modal {
   padding-left: 18px;
   padding-right: 18px; }
 .acc-header h5 a.collapsed::after {
-  background-image: url("images/others/toggle_open.png");
+  background-image: url("../images/others/toggle_open.png");
   background-repeat: no-repeat;
   content: "";
   height: 20px;
@@ -5104,7 +5104,7 @@ h3.widget-title-modal {
           transform: translateY(-50%);
   width: 20px; }
 .acc-header h5 a::after {
-  background-image: url("images/others/toggle_close.png");
+  background-image: url("../images/others/toggle_close.png");
   background-repeat: no-repeat;
   content: "";
   height: 20px;
@@ -5981,13 +5981,13 @@ a.checkout__title {
         .list__view .content .cart__action li.cart a:hover {
           background: #e59285 none repeat scroll 0 0; }
       .list__view .content .cart__action li.wishlist a {
-        background: white url("images/icons/wishlist.png") no-repeat scroll -6% 0; }
+        background: white url("../images/icons/wishlist.png") no-repeat scroll -6% 0; }
         .list__view .content .cart__action li.wishlist a:hover {
           background-position: 108% 0;
           border: 2px solid #e59285;
           background-color: #e59285; }
       .list__view .content .cart__action li.compare a {
-        background: white url("images/icons/compare.png") no-repeat scroll -6% 0; }
+        background: white url("../images/icons/compare.png") no-repeat scroll -6% 0; }
         .list__view .content .cart__action li.compare a:hover {
           background-position: 108% 0;
           border: 2px solid #e59285;

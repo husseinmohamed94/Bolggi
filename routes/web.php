@@ -2,6 +2,12 @@
 
 Route::get('/', ['as' => 'frontend.index','uses' => 'Frontend\IndexController@index']);
 
+Route::get('/{post}',['as' => 'posts.show','uses' => 'Frontend\IndexController@show'])
+
+
+
+
+
 // Authentication Route
 
 Route::get('/login',                     [ 'as' => 'show_login_form'  ,         'uses' =>  'Frontend\Auth\LoginController@showLoginForm' ]);
