@@ -42,6 +42,8 @@
     @include('partial.frontend.header')
 
         <main>
+            @include('partial.flash')
+
             @yield('content')
         </main>   
     @include('partial.frontend.footer')
@@ -52,6 +54,8 @@
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" ></script>
 	<script src="{{asset('frontend/js/js/plugins.js')}}"></script>
-	<script src="{{asset('frontend/js/js/active.js')}}"></script>
+    <script src="{{asset('frontend/js/js/active.js')}}"></script>
+    <script src="{{asset('frontend/js/js/custome.js')}}"></script>
+
 </body>
 </html>

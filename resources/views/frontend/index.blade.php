@@ -23,7 +23,7 @@
                             </a>
                         </div>
                         <div class="content">
-                        <h4><a href="#ls.html">{{$post->title}}</a></h4>
+                        <h4><a href="{{route('posts.show',$post->slug)}}">{{$post->title}}</a></h4>
                             <ul class="post__meta">
                             <li>Posts by : <a href="#">{{$post->user->name}}</a></li>
                                 <li class="post_separator">/</li>
@@ -31,7 +31,7 @@
                         </ul>
                         <p>{!! \Illuminate\Support\Str::limit($post->description,145,'....') !!}</p>
                             <div class="blog__btn">
-                                <a href="#">read more</a>
+                                <a href="{{route('posts.show',$post->slug)}}">read more</a>
                             </div>
                         </div>
                     </article>
