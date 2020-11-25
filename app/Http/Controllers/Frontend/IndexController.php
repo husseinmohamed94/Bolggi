@@ -49,7 +49,20 @@ class IndexController extends Controller
 
 
 
-
+          public function page_show($slug){
+            $page = Post::with(['media','user']);
+    
+           
+          
+            $page= $page->whereSlug($slug);
+            $page =$page->wherePostType('page')->whereStatus(1)->first();
+            if($page){ 
+            return view('frontend.page',compact('page'));
+            }else{
+                return redirect()->route('frontend.index');}
+              }
+    
+    
 
 
     public function store_comment(Request $request ,$slug){
@@ -87,4 +100,19 @@ class IndexController extends Controller
            ]);
 
     }
+
+    public function Contact(){
+        return view('frontend.Contact');
+    }
+
+    public function do_Contact(Request $request ){
+        
+    }
+
+
+
+
+
+
+
 }
