@@ -706,7 +706,7 @@ qe[Xc]=d(N(yb)),qe[Zc]=d(N(Mb+" "+Ob+rc,N(ic))),qe[Yc]=d(N(Mb+" "+Nb+rc,N(hc))),
 
 
 /*================= Contact Form ================*/ 
-
+/*
 $(function() {
 
   // Get the form.
@@ -756,7 +756,7 @@ $(function() {
 
 });
 
-
+*/
 /*========== ScrollUp ==========*/
 /*!
  * scrollup v2.4.1

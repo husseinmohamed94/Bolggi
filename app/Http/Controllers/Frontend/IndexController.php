@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Comment;
+use App\Models\Contact;
 use Illuminate\Http\Request;
 use App\Models\Post;
 use Illuminate\Support\Facades\Validator;
 use Auth;
+
 
 class IndexController extends Controller
 {
@@ -19,14 +21,37 @@ class IndexController extends Controller
             $query->whereStatus(1);
         })
         ->wherePostType('post')->whereStatus(1)->orderBy('id','desc')->paginate(5);
-        return view('frontend.index',compact('posts'));}
+        return view('frontend.index',compact('posts'));
+    }
+
+    
+    public function search(Request $request)
+    {
+     $keyword  = isset($request->keyword) && $request->keyword != '' ? $request->keyword : null ;
+     $posts = Post::with(['category','media','user'])
+     ->whereHas('category',function($query){
+         $query->whereStatus(1);
+     })->whereHas('user',function($query){
+         $query->whereStatus(1);
+     });
+
+    if($keyword != null){
+        $posts=$posts->search($keyword,null,true);
+    }
+
+   $posts = $posts->wherePostType('post')->whereStatus(1)->orderBy('id','desc')->paginate(5);
+   return view('frontend.index',compact('posts'));
+
+
+    }
 
 
 
 
 
     
-    public function post_show($slug){
+    
+        public function post_show($slug){
         $post = Post::with(['category','media','user',
         'approved_comments' =>function($query){
             $query->orderBy('id','desc');
@@ -40,30 +65,20 @@ class IndexController extends Controller
         });
       
         $post= $post->whereSlug($slug);
-        $post =$post->wherePostType('post')->whereStatus(1)->first();
+        $post =$post->whereStatus(1)->first();
         if($post){ 
-        return view('frontend.post',compact('post'));
+
+            $blade = $post->post_type  == 'post' ? 'post' : 'page';
+          
+
+        return view('frontend.' . $blade , compact('post'));
         }else{
             return redirect()->route('frontend.index');}
           }
 
 
 
-          public function page_show($slug){
-            $page = Post::with(['media','user']);
-    
-           
-          
-            $page= $page->whereSlug($slug);
-            $page =$page->wherePostType('page')->whereStatus(1)->first();
-            if($page){ 
-            return view('frontend.page',compact('page'));
-            }else{
-                return redirect()->route('frontend.index');}
-              }
-    
-    
-
+        
 
     public function store_comment(Request $request ,$slug){
       $validation = Validator::make($request->all(),[
@@ -88,6 +103,7 @@ class IndexController extends Controller
             $date['post_id']            = $post->id;
             $date['user_id']            = $userid;
             $post->comments()->create($date);
+            
            // Comment::create($date);
            return redirect()->back()->with([
             'message' => 'comment added Successfully', 
@@ -103,15 +119,33 @@ class IndexController extends Controller
 
     public function Contact(){
         return view('frontend.Contact');
+         }
+
+    public function do_Contact(Request $request){
+
+        $validation = Validator::make($request->all(),[
+            'name'                =>  'required',
+            'email'               =>  'required|email',
+            'comment'             =>  'required:min:10',
+            'mobile'              =>  'nullable|numeric',
+            'title'               =>  'required|min:5',
+            'message'             =>  'required|min:10',
+
+        ]);
+        if($validation->fails()){
+            return redirect()->back()->withErrors($validation)->withInput();
+        }
+
+        $date['name']               = $request->name;
+        $date['email']              = $request->email;
+        $date['mobile']             = $request->mobile;
+        $date['title']              = $request->title;
+        $date['message']            = $request->message;
+
+        Contact::create($date);
+         
     }
-
-    public function do_Contact(Request $request ){
-        
-    }
-
-
-
-
+    
 
 
 

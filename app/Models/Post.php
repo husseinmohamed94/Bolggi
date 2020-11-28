@@ -8,9 +8,10 @@ use App\Models\Category;
 use App\Models\User;
 use App\Models\Comment;
 use App\Models\PostMedia;
+use Nicolaslopezj\Searchable\SearchableTrait;
 class Post extends Model
 {
-    use Sluggable; 
+    use Sluggable,SearchableTrait; 
     protected $guarded = [];  
 
     public function sluggable()
@@ -21,6 +22,17 @@ class Post extends Model
             ]
         ];
     }
+
+    protected $searchable = [
+       
+        'columns' => [
+            'posts.title'               => 10,
+            'posts.description'         => 10,
+           
+        ],
+      
+    ];
+
         public function category(){
             return $this->belongsTo(Category::class);
         }

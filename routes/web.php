@@ -41,10 +41,10 @@ Route::group(['prefix' => 'admin'],function(){
 
 
 
-Route::get('/Contact-us',['as' => 'frontend.Contact','uses' => 'Frontend\IndexController@Contact']);
-Route::post('/Contact-us',['as' => 'frontend.do_Contact','uses' => 'Frontend\IndexController@do_Contact']);
+Route::get('/Contact-us',[         'as'      => 'frontend.Contact',          'uses' => 'Frontend\IndexController@Contact']);
+Route::post('/Contact-us',[        'as'      => 'frontend.do_Contact',       'uses' => 'Frontend\IndexController@do_Contact']);
   
-Route::get('/{page_slug}',['as' => 'pages.show','uses' => 'Frontend\IndexController@page_show']);
+Route::get('/search',[             'as' => 'frontend.search',                      'uses' => 'Frontend\IndexController@search']);
 
-Route::get('/{post}',['as' => 'posts.show','uses' => 'Frontend\IndexController@post_show']);
-Route::post('/{post}',['as' => 'posts.add_comment','uses' => 'Frontend\IndexController@store_comment']);
+Route::get('/{post}',[        'as'      => 'posts.show',                  'uses' => 'Frontend\IndexController@post_show']);
+Route::post('/{post}',[       'as'      => 'posts.add_comment',           'uses' => 'Frontend\IndexController@store_comment']);

@@ -19,7 +19,9 @@
         "laravel/tinker": "^2.5",
         "laravel/ui": "2.4",
         "laravelcollective/html": "^6.2",
-        "mindscms/entrust": "1"
+        "predis/predis": "^1.1",
+        "mindscms/entrust": "1",
+        "nicolaslopezj/searchable": "^1.13"
     },
     "require-dev": {
         "facade/ignition": "^2.0",
