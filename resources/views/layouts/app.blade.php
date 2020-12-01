@@ -52,10 +52,10 @@
     </div>
     
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" ></script>
-	<script src="{{asset('frontend/js/js/plugins.js')}}"></script>
-    <script src="{{asset('frontend/js/js/active.js')}}"></script>
-    <script src="{{asset('frontend/js/js/custome.js')}}"></script>
+    <script src="{{asset('js/app.js') }}" ></script>
+	<script src="{{asset('frontend/js/plugins.js')}}"></script>
+    <script src="{{asset('frontend/js/active.js')}}"></script>
+    <script src="{{asset('frontend/js/custome.js')}}"></script>
 
 </body>
 </html>

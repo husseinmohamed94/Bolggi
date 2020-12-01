@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\Comment;
 use App\Models\Contact;
 use Illuminate\Http\Request;
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Auth;
 
@@ -25,33 +27,75 @@ class IndexController extends Controller
     }
 
     
-    public function search(Request $request)
-    {
-     $keyword  = isset($request->keyword) && $request->keyword != '' ? $request->keyword : null ;
-     $posts = Post::with(['category','media','user'])
-     ->whereHas('category',function($query){
-         $query->whereStatus(1);
-     })->whereHas('user',function($query){
-         $query->whereStatus(1);
-     });
+    public function search(Request $request){
+        $keyword  = isset($request->keyword) && $request->keyword != '' ? $request->keyword : null ;
+        $posts = Post::with(['category','media','user'])
+        ->whereHas('category',function($query){
+            $query->whereStatus(1);
+        })->whereHas('user',function($query){
+            $query->whereStatus(1);
+        });
 
-    if($keyword != null){
-        $posts=$posts->search($keyword,null,true);
-    }
+        if($keyword != null){
+            $posts=$posts->search($keyword,null,true);
+        }
 
-   $posts = $posts->wherePostType('post')->whereStatus(1)->orderBy('id','desc')->paginate(5);
-   return view('frontend.index',compact('posts'));
-
-
-    }
+        $posts = $posts->wherePostType('post')->whereStatus(1)->orderBy('id','desc')->paginate(5);
+        return view('frontend.index',compact('posts'));
 
 
+        }
+
+        public function catgory($slug){
+            $categoey = Category::whereSlug($slug)->orWhere('id',$slug)->whereStatus(1)->first()->id;
+            if($categoey){
+                $posts = Post::with(['media','user','category'])
+                ->withCount('approved_comments')
+                ->whereCategoryId($categoey)
+                ->wherePostType('post')
+                ->whereStatus(1)
+                ->orderBy('id','desc')->paginate(5);
+
+                return view('frontend.index',compact('posts'));
+            }
+          return redirect()->route('frontend.index');
+                
+        }
+        public function archive($date){
+                $exploded_date = explode('-',$date);
+                $month         = $exploded_date[0];
+                $year          = $exploded_date[1];
+
+                $posts =  Post::with(['media','user','category'])
+                ->withCount('approved_comments')
+                ->whereMonth('created_at',$month)
+                ->whereYear('created_at',$year)
+                ->wherePostType('post')
+                ->whereStatus(1)
+                ->orderBy('id','desc')->paginate(5);
+
+                return view('frontend.index',compact('posts'));
+
+        }
+        public function author($username){
+
+            $user = User::whereUsername($username)->whereStatus(1)->first()->id;
+            if($user){
+                $posts = Post::with(['media','user','category'])
+                ->withCount('approved_comments')
+                ->whereUserId($user)
+                ->wherePostType('post')
+                ->whereStatus(1)
+                ->orderBy('id','desc')->paginate(5);
+
+                return view('frontend.index',compact('posts'));
+        }
 
 
 
     
-    
-        public function post_show($slug){
+        }
+    public function post_show($slug){
         $post = Post::with(['category','media','user',
         'approved_comments' =>function($query){
             $query->orderBy('id','desc');
@@ -147,6 +191,7 @@ class IndexController extends Controller
     }
     
 
+  
 
 
 }
