@@ -39,9 +39,13 @@ class RegisterController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest');
+       $this->middleware('guest');
     }
 
+    public function showRegistrationForm()
+    {
+        return view('frontend.auth.register');
+    }
     /**
      * Get a validator for an incoming registration request.
      *
@@ -51,13 +55,12 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
-            'username' => ['required', 'string', 'max:255','unique:users'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'mobile' => ['required', 'numeric', 'unique:users' ],
-
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'user_image' => ['nullable','image','max:20000','mimes:jpeg,jpg,png'],
+            'name'               =>  ['required', 'string', 'max:255'],
+            'username'           =>  ['required', 'string', 'max:255','unique:users'],
+            'email'              =>  ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'mobile'             =>  ['required', 'numeric', 'unique:users' ],
+            'password'           =>  ['required', 'string', 'min:6', 'confirmed'],
+            'user_image'         =>  ['nullable','image','max:20000','mimes:jpeg,jpg,png'],
         ]);
     }
 
@@ -70,13 +73,13 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         $user = User::create([
-            'name' => $data['name'],
-            'username'  => $data['username'],
-            'email' => $data['email'],
-            'mobile' =>$data['mobile'],
-            'password' => Hash::make($data['password']),
-             
+            'name'               => $data['name'],
+            'username'           => $data['username'],
+            'email'              => $data['email'],
+            'mobile'             => $data['mobile'],
+            'password'           => Hash::make($data['password']),
         ]);
+       
         if(isset($data['user_image'])){
             if($image = $data['user_image']){
                 $filename = Str::slug($data['username']) . '.' . $image->getClientOriginalExtension();
@@ -87,12 +90,11 @@ class RegisterController extends Controller
                 $user->update(['user_image' => $filename]);
             }
         }
+     
+     return $user;
     }
 
   
-    public function showRegistrationForm()
-    {
-        return view('frontend.auth.register');
-    }
+  
 
 }

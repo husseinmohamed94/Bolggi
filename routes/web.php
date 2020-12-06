@@ -12,15 +12,15 @@ Route::get('/', ['as' => 'frontend.index','uses' => 'Frontend\IndexController@in
 Route::get('/login',                     [ 'as' => 'frontend.show_login_form'  ,         'uses' =>  'Frontend\Auth\LoginController@showLoginForm' ]);
 Route::post('login',                     [ 'as' => 'frontend.login'  ,                   'uses' =>  'Frontend\Auth\LoginController@login' ]);
 Route::post('logout',                    [ 'as' => 'frontend.logout'  ,                    'uses' =>  'Frontend\Auth\LoginController@logout' ]);
-Route::get('register',                   [ 'as' => 'frontend.register'  ,                 'uses' =>  'Frontend\Auth\RegisterController@showRegistrationForm' ]);
+Route::get('register',                   [ 'as' => 'frontend.show_register_form'  ,     'uses' =>  'Frontend\Auth\RegisterController@showRegistrationForm' ]);
 Route::post('register',                  [ 'as' => 'frontend.register'  ,                'uses' =>  'Frontend\Auth\RegisterController@register' ]);
 Route::get('password/reset',             [ 'as' => 'frontend.password.request'  ,         'uses' => 'Frontend\Auth\ForgotPasswordController@showLinkRequestForm' ]);
 Route::post('password/email',            [ 'as' => 'frontend.password.email'  ,            'uses' => 'Frontend\Auth\ForgotPasswordController@sendResetLinkEmail' ]);
 Route::get('password/reset/{token}',     [ 'as' => 'frontend.password.reset'  ,           'uses' => 'Frontend\Auth\ResetPasswordController@showResetForm' ]);
 Route::post('password/reset',            [ 'as' => 'frontend.password.update'  ,          'uses' => 'Frontend\Auth\ResetPasswordController@reset' ]);
-Route::get('email/verify',               ['as' => 'frontend.verification.notice' ,        'uses' => 'Frontend\Auth\VerificationController@show']);
-Route::get('email/verify/{id}/{hash}',   ['as' => 'frontend.verification.verify' ,        'uses' => 'Frontend\Auth\VerificationController@verify']);
-Route::post('email/resend',              ['as' => 'frontend.verification.resend' ,       'uses' => 'Frontend\Auth\VerificationController@resend']);
+Route::get('email/verify',               ['as' => 'verification.notice' ,        'uses' => 'Frontend\Auth\VerificationController@show']);
+Route::get('email/verify/{id}/{hash}',   ['as' => 'verification.verify' ,        'uses' => 'Frontend\Auth\VerificationController@verify']);
+Route::post('email/resend',              ['as' => 'verification.resend' ,       'uses' => 'Frontend\Auth\VerificationController@resend']);
 
 Route::group(['prefix' => 'admin'],function(){
 

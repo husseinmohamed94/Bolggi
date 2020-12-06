@@ -170,7 +170,6 @@ class IndexController extends Controller
         $validation = Validator::make($request->all(),[
             'name'                =>  'required',
             'email'               =>  'required|email',
-            'comment'             =>  'required:min:10',
             'mobile'              =>  'nullable|numeric',
             'title'               =>  'required|min:5',
             'message'             =>  'required|min:10',
@@ -185,9 +184,11 @@ class IndexController extends Controller
         $date['mobile']             = $request->mobile;
         $date['title']              = $request->title;
         $date['message']            = $request->message;
-
         Contact::create($date);
-         
+        return redirect()->back()->with([
+            'message' => 'contact  Successfully', 
+            'alert-type'  => 'success'
+           ]);
     }
     
 

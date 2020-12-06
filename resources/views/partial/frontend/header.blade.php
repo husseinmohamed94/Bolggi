@@ -68,7 +68,7 @@
                                                             <!-- Authentication Links -->
                                 @guest
                                         <span><a  href="{{ route('frontend.show_login_form') }}">Login</a> </span>
-                                        <span> <a  href="{{ route('frontend.register') }}">Register</a></span>
+                                        <span> <a  href="{{ route('frontend.show_register_form') }}">Register</a></span>
                                      @else
                                      <span><a href="#">My Dashbord</a></span>
 
