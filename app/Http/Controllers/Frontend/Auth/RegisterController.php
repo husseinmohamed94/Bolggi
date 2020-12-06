@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Intervention\Image\Facades;
+use Illuminate\Http\Request;
 class RegisterController extends Controller
 {
     /*
@@ -39,7 +40,7 @@ class RegisterController extends Controller
      */
     public function __construct()
     {
-       $this->middleware('guest');
+      // $this->middleware('guest');
     }
 
     public function showRegistrationForm()
@@ -95,6 +96,12 @@ class RegisterController extends Controller
     }
 
   
-  
+    protected function registered(Request $request, $user)
+    {
+       return redirect()->route('frontend.index')->with([
+        'message'  => 'Your account registered Successfully, Please check Your email to activate you account . ',
+        'alert-type' => 'success'
+       ]);
+    }
 
 }

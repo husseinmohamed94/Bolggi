@@ -70,7 +70,7 @@
                                         <span><a  href="{{ route('frontend.show_login_form') }}">Login</a> </span>
                                         <span> <a  href="{{ route('frontend.show_register_form') }}">Register</a></span>
                                      @else
-                                     <span><a href="#">My Dashbord</a></span>
+                                     <span><a href="{{ route('frontend.dashboard') }}">My Dashbord</a></span>
 
                                     <span><a  href="{{ route('frontend.logout') }}"onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                           Logout</a> </span>

@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Frontend
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
@@ -48,6 +49,20 @@ class LoginController extends Controller
     public function username()
     {
         return 'username';
+    }
+    protected function authenticated(Request $request, $user)
+    {
+        if($user->status == 1){
+            return redirect()->route('frontend.index')->with([
+                'message'  => 'Your loging Successfully . ',
+                'alert-type' => 'success'
+               ]);
+        }
+        return redirect()->route('frontend.index')->with([
+            'message'  => 'plasase contact bloggi admin   . ',
+            'alert-type' => 'warning'
+           ]);
+       
     }
 
 }
