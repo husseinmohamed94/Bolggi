@@ -31,9 +31,11 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('frontend/css/plugins.css') }}" rel="stylesheet">
     <link href="{{ asset('frontend/css/style.css') }}" rel="stylesheet">
-
+    <link href="{{ asset('frontend/js/bootsrap-fileinput/css/fileinput.min.css') }}" media="all" rel="stylesheet" type="text/css" />
 	<!-- Modernizer js -->
-	<script src="{{asset('frontend/js/js/vendor/modernizr-3.5.0.min.js')}}"></script>
+    <script src="{{asset('frontend/js/js/vendor/modernizr-3.5.0.min.js')}}"></script>
+    
+    @yield('style')
 </head>
 <body>
     <div id="app">
@@ -55,7 +57,16 @@
     <script src="{{asset('js/app.js') }}" ></script>
 	<script src="{{asset('frontend/js/plugins.js')}}"></script>
     <script src="{{asset('frontend/js/active.js')}}"></script>
+
+    <script src="{{asset('frontend/js/bootsrap-fileinput/js/plugins/piexif.min.js')}}"></script>
+    <script src="{{asset('frontend/js/bootsrap-fileinput/js/plugins/sortable.min.js')}}"></script>
+
+    <script src="{{asset('frontend/js/bootsrap-fileinput/js/fileinput.min.js')}}"></script>
+    
+    <script src="{{asset('frontend/js/bootsrap-fileinput/js/themes/fa/theme.min.js')}}"></script>
+
     <script src="{{asset('frontend/js/custome.js')}}"></script>
 
+@yield('script')
 </body>
 </html>
