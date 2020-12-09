@@ -21,9 +21,9 @@
                          <tr>
                          <td>{{$post->title}}</td>
                          <td>{{$post->comments_count }}</td>
-                            <td>{{$post->ststus }}</td>
+                            <td>{{$post->status }}</td>
                             <td>
-                            <a href="{{route('frontend.dashboard')}}" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a>    
+                            <a href="{{route('users.post.edit',$post->id)}}" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a>    
                             <a href="{{route('frontend.dashboard')}}"
                              onclick="if(confirm('Are you sure to delete this post')){document.getElementById('post-delete-{{$post->id}}').submit();}else{return fales;} " class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></a>    
                             <form action="{{route('frontend.dashboard')}}" id="post-delete-{{$post->id}}">

@@ -22,7 +22,7 @@
                                     <div class="post-wrapper d-flex">
                                         <div class="thumb">
                                             <a href="{{route('posts.show',$recent_post->slug)}}">  
-                                                @if($recent_post->media > 0)
+                                                @if($recent_post->media->count() > 0)
                                                         <img src="{{asset('assets/post/' . $recent_post->media->first()->file_name)}}" alt="{{$recent_post->title}}">
                                                         @else
                                                         <img src="{{asset('assets/post/defaultsmall.jpg')}}" alt="blog images">

@@ -14,7 +14,7 @@
                       <article class="blog__post d-flex flex-wrap">
                         <div class="thumb">
                             <a href="#">  
-                             @if( $post->media > 0)
+                             @if( $post->media->count() > 0)
                                      <img src="{{asset('assets/post/' . $post->media->first()->file_name)}}" alt="{{$post->title}}">
                                      @else
 

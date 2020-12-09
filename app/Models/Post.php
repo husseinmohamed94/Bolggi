@@ -46,6 +46,7 @@ class Post extends Model
             return $this->hasMany(Comment::class)->whereStatus(1);
         }
         public function media(){
-            return $this->belongsTo(PostMedia::class);
+         
+            return $this->hasMany(PostMedia::class);
         }
 }
