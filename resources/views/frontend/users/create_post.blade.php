@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('style')
-<link rel="stylesheet" href="{{'frontend/js/summernote/summernote-bs4.min.css'}}">
+<link rel="stylesheet" href="{{ asset('frontend/js/summernote/summernote-bs4.min.css')}}">
 @endsection
 @section('content')
   <!-- Start Blog Area -->
@@ -70,7 +70,7 @@
 @endsection
 
 @section('script')
-<script src="{{'frontend/js/summernote/summernote-bs4.min.js'}}"></script>
+<script src="{{ asset('frontend/js/summernote/summernote-bs4.min.js')}}"></script>
 <script>
     $(function(){
         $('.summernote').summernote({
