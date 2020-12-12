@@ -11,6 +11,7 @@ use App\Models\Post;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Auth;
+use Stevebauman\Purify\Facades\Purify;
 
 
 class IndexController extends Controller
@@ -143,7 +144,7 @@ class IndexController extends Controller
             $date['email']              = $request->email;
             $date['url']                = $request->url;
             $date['ip_address']         = $request->ip() ;
-            $date['comment']            = $request->comment;
+            $date['comment']            = Purify::clean($request->comment);
             $date['post_id']            = $post->id;
             $date['user_id']            = $userid;
             $post->comments()->create($date);
