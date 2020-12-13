@@ -3,22 +3,26 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class NewCommentForPostOwnerNotify extends Notification
+class NewCommentForPostOwnerNotify extends Notification implements ShouldQueue,ShouldBroadcast
 {
     use Queueable;
+
+    protected $comment;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($comment)
     {
-        //
+        $this->comment =$comment;
     }
 
     /**
@@ -29,7 +33,12 @@ class NewCommentForPostOwnerNotify extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail'];
+        $arr = ['database','broadcast'];
+        if($notifiable->receive_email == 1){
+            $arr[] = 'mail'; 
+        }
+
+        return $arr;
     }
 
     /**
@@ -41,9 +50,9 @@ class NewCommentForPostOwnerNotify extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+                    ->line('Thera is new comment from ' . $this->comment->name .'on your post'.$this->comment->post->title. '.')
+                    ->action('Go to your post ', route('posts.show',$this->comment->post->slug))
+                    ->line('Thank you for using Bloggi System!');
     }
 
     /**
@@ -52,10 +61,37 @@ class NewCommentForPostOwnerNotify extends Notification
      * @param  mixed  $notifiable
      * @return array
      */
-    public function toArray($notifiable)
+    public function toDatabase($notifiable)
     {
         return [
-            //
+           'name'                     => $this->comment->name,
+           'email'                    => $this->comment->email,
+           'url'                      => $this->comment->url,
+           'comment'                  => $this->comment->comment,
+           'post_id'                  => $this->comment->post->post_id,
+           'post_title'               => $this->comment->post->title,
+           'post_slug'                => $this->comment->post->slug,
+           'created_at'               => $this->comment->created_at->format('d M, Y h:i a'),
+
+
         ];
+    }
+
+    public function toBroadcast($notifiable)
+    {
+        return new BroadcastMessage([
+            'data' => [
+                'name'                     => $this->comment->name,
+                'email'                    => $this->comment->email,
+                'url'                      => $this->comment->url,
+                'comment'                  => $this->comment->comment,
+                'post_id'                  => $this->comment->post->post_id,
+                'post_title'               => $this->comment->post->title,
+                'post_slug'                => $this->comment->post->slug,
+                'created_at'               => $this->comment->created_at->format('d M, Y h:i a'),
+     
+                   ]
+             ]);
+            
     }
 }

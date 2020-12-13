@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Validator;
 use Auth;
 use Stevebauman\Purify\Facades\Purify;
 
+use App\Notifications\NewCommentForPostOwnerNotify;
 
 class IndexController extends Controller
 {
@@ -138,7 +139,7 @@ class IndexController extends Controller
 
         $post = Post::whereSlug($slug)->wherePostType('post')->whereStatus(1)->first();
         if($post){
-            $userid = auth()->check() ? auth()->id : null ;
+            $userid = auth()->check() ? auth()->id() : null ;
  
             $date['name']               = $request->name;
             $date['email']              = $request->email;
@@ -147,7 +148,11 @@ class IndexController extends Controller
             $date['comment']            = Purify::clean($request->comment);
             $date['post_id']            = $post->id;
             $date['user_id']            = $userid;
-            $post->comments()->create($date);
+
+          $comment =  $post->comments()->create($date);
+          if(auth()->guest() || auth()->id() != $post->user_id){
+              $post->user->notify(new NewCommentForPostOwnerNotify($comment));
+          }
             
            // Comment::create($date);
            return redirect()->back()->with([
