@@ -4,10 +4,8 @@
 <link rel="stylesheet" href="{{ asset('frontend/js/summernote/summernote-bs4.min.css')}}">
 @endsection
 @section('content')
-  <!-- Start Blog Area -->
-  <div class="page-blog bg--white section-padding--lg blog-sidebar right-sidebar">
-    <div class="container">
-        <div class="row">
+ 
+
             <div class="col-lg-9 col-12">
               <h3>Create post</h3>
                 {!! Form::open(['route' => 'users.post.store','method ' => 'POST' ,'files' => true]) !!}   
@@ -62,10 +60,8 @@
             <div class="col-lg-3 col-12 md-mt-40 sm-mt-40">
                 @include('partial.frontend.users.sidebar')
             </div>
-        </div>
-    </div>
-</div>
-<!-- End Blog Area -->
+
+      
 
 @endsection
 

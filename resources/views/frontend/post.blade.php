@@ -2,12 +2,6 @@
 @extends('layouts.app')
 
 @section('content')
-
-
-
-<div class="page-blog-details section-padding--lg bg--white">
-    <div class="container">
-        <div class="row">
             <div class="col-lg-9 col-12">
                 <div class="blog-details content">
                     <article class="blog-post-details">
@@ -127,11 +121,5 @@
                 @include('partial.frontend.sidebar')
 
             </div>
-        </div>
-    </div>
-</div>
-
-
-
-
+    
 @endsection

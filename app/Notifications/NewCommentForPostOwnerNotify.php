@@ -9,11 +9,12 @@ use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class NewCommentForPostOwnerNotify extends Notification implements ShouldQueue,ShouldBroadcast
+class NewCommentForPostOwnerNotify extends Notification implements ShouldQueue, ShouldBroadcast
 {
     use Queueable;
 
     protected $comment;
+
 
     /**
      * Create a new notification instance.
@@ -22,7 +23,7 @@ class NewCommentForPostOwnerNotify extends Notification implements ShouldQueue,S
      */
     public function __construct($comment)
     {
-        $this->comment =$comment;
+        $this->comment = $comment;
     }
 
     /**
@@ -33,12 +34,14 @@ class NewCommentForPostOwnerNotify extends Notification implements ShouldQueue,S
      */
     public function via($notifiable)
     {
-        $arr = ['database','broadcast'];
-        if($notifiable->receive_email == 1){
-            $arr[] = 'mail'; 
+        $arr = ['database', 'broadcast'];
+
+        if ($notifiable->receive_email == 1) {
+            $arr[] = 'mail';
         }
 
         return $arr;
+
     }
 
     /**
@@ -50,9 +53,9 @@ class NewCommentForPostOwnerNotify extends Notification implements ShouldQueue,S
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->line('Thera is new comment from ' . $this->comment->name .'on your post'.$this->comment->post->title. '.')
-                    ->action('Go to your post ', route('posts.show',$this->comment->post->slug))
-                    ->line('Thank you for using Bloggi System!');
+                    ->line('There is new comment from ' . $this->comment->name . ' on your post ' . $this->comment->post->title . '.')
+                    ->action('Go to your post', route('users.comment.edit', $this->comment->id))
+                    ->line('Thank you for using Bloggi System');
     }
 
     /**
@@ -64,16 +67,15 @@ class NewCommentForPostOwnerNotify extends Notification implements ShouldQueue,S
     public function toDatabase($notifiable)
     {
         return [
-           'name'                     => $this->comment->name,
-           'email'                    => $this->comment->email,
-           'url'                      => $this->comment->url,
-           'comment'                  => $this->comment->comment,
-           'post_id'                  => $this->comment->post->post_id,
-           'post_title'               => $this->comment->post->title,
-           'post_slug'                => $this->comment->post->slug,
-           'created_at'               => $this->comment->created_at->format('d M, Y h:i a'),
-
-
+            'id'                => $this->comment->id,
+            'name'              => $this->comment->name,
+            'email'             => $this->comment->email,
+            'url'               => $this->comment->url,
+            'comment'           => $this->comment->comment,
+            'post_id'           => $this->comment->post_id,
+            'post_title'        => $this->comment->post->title,
+            'post_slug'         => $this->comment->post->slug,
+            'created_at'        => $this->comment->created_at->format('d M, Y h:i a'),
         ];
     }
 
@@ -81,17 +83,16 @@ class NewCommentForPostOwnerNotify extends Notification implements ShouldQueue,S
     {
         return new BroadcastMessage([
             'data' => [
-                'name'                     => $this->comment->name,
-                'email'                    => $this->comment->email,
-                'url'                      => $this->comment->url,
-                'comment'                  => $this->comment->comment,
-                'post_id'                  => $this->comment->post->post_id,
-                'post_title'               => $this->comment->post->title,
-                'post_slug'                => $this->comment->post->slug,
-                'created_at'               => $this->comment->created_at->format('d M, Y h:i a'),
-     
-                   ]
-             ]);
-            
+                'id'            => $this->comment->id,
+                'name'          => $this->comment->name,
+                'email'         => $this->comment->email,
+                'url'           => $this->comment->url,
+                'comment'       => $this->comment->comment,
+                'post_id'       => $this->comment->post_id,
+                'post_title'    => $this->comment->post->title,
+                'post_slug'     => $this->comment->post->slug,
+                'created_at'    => $this->comment->created_at->format('d M, Y h:i a'),
+            ]
+        ]);
     }
 }

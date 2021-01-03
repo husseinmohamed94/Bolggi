@@ -25,6 +25,12 @@ Route::post('email/resend',              [ 'as' => 'verification.resend' ,      
 
 Route::group(['middleware' => 'verified'],function(){
     Route::get('/dashboard',                               ['as' => 'frontend.dashboard' , 'uses' => 'Frontend\UsersController@index']);
+  
+    Route::any('user/notification/get','Frontend\NotificationsController@getnotification');
+    Route::any('user/notification/read','Frontend\NotificationsController@markAsRead');
+    Route::any('user/notification/read/{id}','Frontend\NotificationsController@markAsReadAndReadirect');
+
+
     Route::get('/edit-info',                               ['as' => 'users.edit_info' , 'uses' => 'Frontend\UsersController@edit_info']);
     Route::post('/edit-info',                              ['as' => 'users.update_info' , 'uses' => 'Frontend\UsersController@update_info']);
 
@@ -50,16 +56,29 @@ Route::group(['prefix' => 'admin'],function(){
 
     Route::get('/login',                     [ 'as' => 'admin.show_login_form'  ,         'uses' =>  'Backend\Auth\LoginController@showLoginForm' ]);
     Route::post('login',                     [ 'as' => 'admin.login'  ,                   'uses' =>  'Backend\Auth\LoginController@login' ]);
-    Route::post('logout',                    [ 'as' => 'admin.show_login_form'  ,         'uses' =>  'Backend\Auth\LoginController@logout' ]);
-    Route::get('password/reset',             [ 'as' => 'admin.password.request'  ,         'uses' => 'Backend\Auth\LoginController@showLinkRequestForm' ]);
-    Route::post('password/email',            [ 'as' => 'admin.assword.email'  ,            'uses' => 'Backend\Auth\LoginController@sendResetLinkEmail' ]);
-    Route::get('password/reset/{token}',     [ 'as' => 'admin.password.reset'  ,           'uses' => 'Backend\Auth\LoginController@showResetForm' ]);
-    Route::post('password/reset',            [ 'as' => 'admin.password.update'  ,          'uses' => 'Backend\Auth\LoginController@reset' ]);
-    Route::get('email/verify',               ['as' =>  'admin.verification.notice' ,        'uses' => 'Backend\Auth\VerificationController@show']);
-    Route::get('email/verify/{id}/{hash}',   ['as' =>  'admin.verification.verify' ,        'uses' => 'Backend\Auth\VerificationController@verify']);
-    Route::post('email/resend',              ['as' => 'admin.verification.resend' ,       'uses' => 'Backend\Auth\VerificationController@resend']);
-    
-    
+    Route::post('logout',                    [ 'as' => 'admin.logout'  ,             'uses' =>  'Backend\Auth\LoginController@logout' ]);
+    Route::get('password/reset',             [ 'as' => 'password.request'  ,         'uses' => 'Backend\Auth\LoginController@showLinkRequestForm' ]);
+    Route::post('password/email',            [ 'as' => 'password.email'  ,            'uses' => 'Backend\Auth\LoginController@sendResetLinkEmail' ]);
+    Route::get('password/reset/{token}',     [ 'as' => 'password.reset'  ,           'uses' => 'Backend\Auth\LoginController@showResetForm' ]);
+    Route::post('password/reset',            [ 'as' => 'password.update'  ,          'uses' => 'Backend\Auth\LoginController@reset' ]);
+  
+    Route::group(['middleware' => ['roles','role:admin|editor']],function(){
+        Route::get('/',                          [ 'as' => 'admin.index_route'  ,         'uses' =>  'Backend\AdminController@index' ]);
+        Route::get('/index',                     [ 'as' => 'admin.index'        ,         'uses' =>  'Backend\AdminController@index' ]);
+
+        Route::resource('posts',                      'Backend\PostsController',['as' => 'admin']);
+        Route::resource('pages',                      'Backend\PagesController',['as' => 'admin']);
+        Route::resource('post_comments',              'Backend\PostCommentsController',['as' => 'admin']);
+        Route::resource('post_categories',            'Backend\PostCategoriesController',['as' => 'admin']);
+        Route::resource('users',                      'Backend\UsersController',['as' => 'admin']);
+        Route::resource('contact_us',                 'Backend\ContactUsController',['as' => 'admin']);
+        Route::resource('supervisor',                 'Backend\SupervisorsController',['as' => 'admin']);
+        Route::resource('settings',                  'Backend\SettingsController',['as' => 'admin']);
+
+
+    });
+
+
 });
 
 

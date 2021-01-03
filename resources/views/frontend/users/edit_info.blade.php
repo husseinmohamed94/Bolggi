@@ -1,10 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
-  <!-- Start Blog Area -->
-  <div class="page-blog bg--white section-padding--lg blog-sidebar right-sidebar">
-    <div class="container">
-        <div class="row">
+  
+
             <div class="col-lg-9 col-12">
                 <h3>Update Infprmation</h3>
                 {!! Form::open(['route' => 'users.update_info' ,'name' => 'user_info','id' => 'user_info', 'method' => 'post', 'files' => true ]) !!}
@@ -106,9 +104,6 @@
                 @include('partial.frontend.users.sidebar')
             </div>
 
-        </div>
-    </div>
-</div>
-<!-- End Blog Area -->
+       
 
 @endsection

@@ -1,9 +1,6 @@
 @extends('layouts.app')
 @section('content')
-  <!-- Start Blog Area -->
-  <div class="page-blog bg--white section-padding--lg blog-sidebar right-sidebar">
-    <div class="container">
-        <div class="row">
+  
             <div class="col-lg-9 col-12">
                 <h3>Edit comment on:  ( {{$comment->post->title}})</h3>
                 {!! Form::model($comment , ['route' =>[ 'users.comment.update',$comment->id],'method' => 'put' ]) !!}   
@@ -60,9 +57,6 @@
                  </div>
 
             </div>
-        </div>
-    </div>
-</div>
-<!-- End Blog Area -->
+       
 
 @endsection

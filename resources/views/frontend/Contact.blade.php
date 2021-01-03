@@ -1,11 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-  <!-- Start Contact Area -->
-  <section class="wn_contact_area bg--white pt--80 pb--80">
-  
-    <div class="container">
-        <div class="row">
+
             <div class="col-lg-8 col-12">
                 <div class="contact-form-wrap">
                     <h2 class="contact__title">Get in touch</h2>
@@ -109,8 +105,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-</section>
-<!-- End Contact Area -->
+
+   
 @endsection
