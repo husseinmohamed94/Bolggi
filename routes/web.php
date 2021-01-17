@@ -57,15 +57,16 @@ Route::group(['prefix' => 'admin'],function(){
     Route::get('/login',                     [ 'as' => 'admin.show_login_form'  ,         'uses' =>  'Backend\Auth\LoginController@showLoginForm' ]);
     Route::post('login',                     [ 'as' => 'admin.login'  ,                   'uses' =>  'Backend\Auth\LoginController@login' ]);
     Route::post('logout',                    [ 'as' => 'admin.logout'  ,             'uses' =>  'Backend\Auth\LoginController@logout' ]);
-    Route::get('password/reset',             [ 'as' => 'password.request'  ,         'uses' => 'Backend\Auth\LoginController@showLinkRequestForm' ]);
-    Route::post('password/email',            [ 'as' => 'password.email'  ,            'uses' => 'Backend\Auth\LoginController@sendResetLinkEmail' ]);
-    Route::get('password/reset/{token}',     [ 'as' => 'password.reset'  ,           'uses' => 'Backend\Auth\LoginController@showResetForm' ]);
-    Route::post('password/reset',            [ 'as' => 'password.update'  ,          'uses' => 'Backend\Auth\LoginController@reset' ]);
+    Route::get('password/reset',             [ 'as' => 'admin.password.request'  ,         'uses' => 'Backend\Auth\LoginController@showLinkRequestForm' ]);
+    Route::post('password/email',            [ 'as' => 'admin.password.email'  ,            'uses' => 'Backend\Auth\LoginController@sendResetLinkEmail' ]);
+    Route::get('password/reset/{token}',     [ 'as' => 'admin.password.reset'  ,           'uses' => 'Backend\Auth\LoginController@showResetForm' ]);
+    Route::post('password/reset',            [ 'as' => 'admin.password.update'  ,          'uses' => 'Backend\Auth\LoginController@reset' ]);
   
     Route::group(['middleware' => ['roles','role:admin|editor']],function(){
         Route::get('/',                          [ 'as' => 'admin.index_route'  ,         'uses' =>  'Backend\AdminController@index' ]);
         Route::get('/index',                     [ 'as' => 'admin.index'        ,         'uses' =>  'Backend\AdminController@index' ]);
 
+        Route::post('/posts/removeImage/{media_id}' ,         ['as' =>'admin.posts.media.destroy','uses' => 'Backend\PostsController@removeImage']);
         Route::resource('posts',                      'Backend\PostsController',['as' => 'admin']);
         Route::resource('pages',                      'Backend\PagesController',['as' => 'admin']);
         Route::resource('post_comments',              'Backend\PostCommentsController',['as' => 'admin']);
