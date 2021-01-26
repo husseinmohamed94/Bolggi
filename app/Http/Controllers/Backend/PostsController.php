@@ -7,14 +7,24 @@ use App\Models\Category;
 use App\Models\Post;
 use App\Models\PostMedia;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
-
 use Stevebauman\Purify\Facades\Purify;
 use Intervention\Image\Facades\Image;
+use App\Models\User;
 class PostsController extends Controller
 {
+
+    public function __construct()
+    {
+        if(\auth()->check()){
+            $this->middleware('auth');
+        }else{
+            return view('backend.auth.login');
+        }
+    }
     /**
      * Display a listing of the resource.
      *
@@ -22,8 +32,47 @@ class PostsController extends Controller
      */
     public function index()
     {
-        $posts = Post::with(['media','user','category','comments'])->wherePostType('post')->orderBy('id','desc')->paginate(10);
-        return view('backend.posts.index',compact('posts'));
+                /* if(!\auth()->user()->ability('admin','manage_posts,show_posts')){
+                            return redirect('admin/index');'
+                        }
+                class EntrustAbility
+
+                        if (!\auth()->user()->ability('admin','manage_post,show_posts')) {
+                            return redirect('admin/index');
+                        }*/
+        $keyword = (isset(\request()->keyword) && \request()->keyword != '') ? \request()->keyword : null;
+        $categoryId = (isset(\request()->category_id) && \request()->category_id != '') ? \request()->category_id : null;
+        $status = (isset(\request()->status) && \request()->status != '') ? \request()->status : null;
+        $sort_by = (isset(\request()->sort_by) && \request()->sort_by != '') ? \request()->sort_by : 'id';
+        $order_by = (isset(\request()->order_by) && \request()->order_by != '') ? \request()->order_by : 'desc';
+        $limit_by = (isset(\request()->limit_by) && \request()->limit_by != '') ? \request()->limit_by : '10';
+
+
+        $posts = Post::with(['media','user','category','comments'])->wherePostType('post');
+
+        if($keyword != null){
+            $posts= $posts->search($keyword);
+        }
+        if($categoryId != null){
+            $posts= $posts->whereCategoryId($categoryId);
+        }
+        if($status != null){
+            $posts= $posts->whereStatus($status);
+        }
+
+
+       $posts= $posts->orderBy($sort_by,$order_by);
+       $posts= $posts->paginate($limit_by);
+       
+       
+       
+       
+       
+       
+       
+       
+        $categories = Category::orderBy('id','desc')->pluck('name','id'); 
+        return view('backend.posts.index',compact('posts','categories'));
 
     }
 
@@ -34,6 +83,9 @@ class PostsController extends Controller
      */
     public function create()
     {
+            /*if(!\auth()->user()->ability('admin','create_posts')){
+                return redirect('admin/index');
+            }*/
         $categories = Category::orderBy('id','desc')->pluck('name','id'); 
         return view('backend.posts.create',compact('categories'));
 
@@ -47,7 +99,9 @@ class PostsController extends Controller
      */
     public function store(Request $request)
     {
-      
+            /*  if(!\auth()->user()->ability('admin','create_posts')){
+                    return redirect('admin/index');
+                }*/
             $validate = Validator::make($request->all(),[
                 'title'                 =>'required',
                 'description'           => 'required|min:50',
@@ -108,6 +162,9 @@ class PostsController extends Controller
      */
     public function show($id)
     {
+            /*  if(!\auth()->user()->ability('admin','display_posts')){
+                    return redirect('admin/index');
+                }*/
         $post = Post::with(['media','category','user','comments'])->whereId($id)->wherePostType('post')->first();
         return view('backend.posts.show',compact('post'));
 
@@ -121,7 +178,10 @@ class PostsController extends Controller
      */
     public function edit($id)
     {
-        $categories = Category::orderBy('id','desc')->pluck('name','id'); 
+        /* if(!\auth()->user()->ability('admin','update_posts')){
+                return redirect('admin/index');
+            }*/
+            $categories = Category::orderBy('id','desc')->pluck('name','id'); 
         $post = Post::with(['media'])->whereId($id)->wherePostType('post')->first();
         return view('backend.posts.edit',compact('categories','post'));
 
@@ -136,6 +196,9 @@ class PostsController extends Controller
      */
     public function update(Request $request, $id)
     {
+        /* if(!\auth()->user()->ability('admin','update_posts')){
+                return redirect('admin/index');
+            }*/
          $validate = Validator::make($request->all(),[
              
 
@@ -202,6 +265,10 @@ class PostsController extends Controller
      */
     public function destroy($id)
     {
+            /* if(!\auth()->user()->ability('admin','delete_posts')){
+                    return redirect('admin/index');
+                }*/
+      
         $post = Post::whereId($id)->wherePostType('post')->first();
         if($post){
          if($post->media->count() > 0){
@@ -224,6 +291,10 @@ class PostsController extends Controller
     }
 
     public function removeImage(Request $request){
+        
+            /*  if(!\auth()->user()->ability('admin','delete_posts')){
+                    return redirect('admin/index');
+                }*/
         $media = PostMedia::whereId($request->media_id)->first();
         if($media){
             if(File::exists('assets/post/' .$media->file_name )){
