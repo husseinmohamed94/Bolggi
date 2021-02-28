@@ -14,7 +14,7 @@ use Auth;
 use Stevebauman\Purify\Facades\Purify;
 
 use App\Notifications\NewCommentForPostOwnerNotify;
-
+use App\Notifications\NewCommentForAdminNotify;
 class IndexController extends Controller
 {
     public function index(){
@@ -152,7 +152,11 @@ class IndexController extends Controller
           if(auth()->guest() || auth()->id() != $post->user_id){
               $post->user->notify(new NewCommentForPostOwnerNotify($comment));
           }
-            
+            User::whereHas('roles',function($query){
+             $query->whereIn('name',['admin','editor']);
+            })->each(function($admin,$key) use ($comment){
+                $admin->notify(new NewCommentForAdminNotify($comment));
+            });
            // Comment::create($date);
            return redirect()->back()->with([
             'message' => 'comment added Successfully', 

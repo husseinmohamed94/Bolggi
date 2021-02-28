@@ -1,39 +1,41 @@
 <?php
 
 use App\Models\Permission;
+use Spatie\Valuestore\Valuestore;
 
-function getParentShowOf($param){
 
-    $f = str_replace('admin','',$param);
-    $perm = Permission::where ('as',$f)->first();
+function getSettingsOf($key) {
+    $settings = Valuestore::make(config_path('settings.json'));
+    return $settings->get($key);
+}
+
+
+function getParentShowOf($param)
+{
+    $f = str_replace('admin.', '', $param);
+    $perm = Permission::where('as', $f)->first();
     return $perm ? $perm->parent_show : $f;
-} 
+}
 
-
-
-function getParentOf($param){
-
-    $f = str_replace('admin','',$param);
-    $perm = Permission::where ('as',$f)->first();
+function getParentOf($param)
+{
+    $f = str_replace('admin.', '', $param);
+    $perm = Permission::where('as', $f)->first();
     return $perm ? $perm->parent : $f;
-} 
+}
 
-function getParentIdOf($param){
-    $f = str_replace('admin','',$param);
-    $perm = Permission::where ('as',$f)->first();
-    return $perm ? $perm->id : $f;
-} 
+function getParentIdOf($param)
+{
+    $f = str_replace('admin.', '', $param);
+    $perm = Permission::where('as', $f)->first();
+    return $perm ? $perm->id : null;
+}
 
-
-
-function getIdMenuOf($param){
-
-    $perm = Permission::where ('id',$param)->first();
+function getIdMenuOf($param)
+{
+    $perm = Permission::where('id', $param)->first();
     return $perm ? $perm->parent_show : null;
-} 
-
-
-
+}
 
 function get_gravatar( $email, $s = 80, $d = 'mp', $r = 'g', $img = false, $atts = array() ) {
     $url = 'https://www.gravatar.com/avatar/';
@@ -46,4 +48,4 @@ function get_gravatar( $email, $s = 80, $d = 'mp', $r = 'g', $img = false, $atts
         $url .= ' />';
     }
     return $url;
-} 
+}

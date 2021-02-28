@@ -63,6 +63,14 @@ Route::group(['prefix' => 'admin'],function(){
     Route::post('password/reset',            [ 'as' => 'admin.password.update'  ,          'uses' => 'Backend\Auth\LoginController@reset' ]);
   
     Route::group(['middleware' => ['roles','role:admin|editor']],function(){
+      
+        Route::any('/notification/get','Backend\NotificationsController@getnotification');
+       Route::any('/notification/read','Backend\NotificationsController@markAsRead');
+     Route::any('/notification/read/{id}','Backend\NotificationsController@markAsReadAndReadirect');
+
+      
+      
+      
         Route::get('/',                          [ 'as' => 'admin.index_route'  ,         'uses' =>  'Backend\AdminController@index' ]);
         Route::get('/index',                     [ 'as' => 'admin.index'        ,         'uses' =>  'Backend\AdminController@index' ]);
 
@@ -73,9 +81,13 @@ Route::group(['prefix' => 'admin'],function(){
         Route::resource('pages',                      'Backend\PagesController',['as' => 'admin']);
         Route::resource('post_comments',              'Backend\PostCommentsController',['as' => 'admin']);
         Route::resource('post_categories',            'Backend\PostCategoriesController',['as' => 'admin']);
+        Route::post('/users/removeImage' ,  ['as' =>'admin.users.remove_image','uses' => 'Backend\UsersController@removeImage']);
+
         Route::resource('users',                      'Backend\UsersController',['as' => 'admin']);
         Route::resource('contact_us',                 'Backend\ContactUsController',['as' => 'admin']);
-        Route::resource('supervisor',                 'Backend\SupervisorsController',['as' => 'admin']);
+        Route::post('/supervisors/removeImage' ,  ['as' =>'admin.supervisors.remove_image','uses' => 'Backend\SupervisorsController@removeImage']);
+
+        Route::resource('supervisors',                 'Backend\SupervisorsController',['as' => 'admin']);
         Route::resource('settings',                  'Backend\SettingsController',['as' => 'admin']);
 
 

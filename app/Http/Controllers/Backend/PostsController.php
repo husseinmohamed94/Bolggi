@@ -40,6 +40,7 @@ class PostsController extends Controller
                         if (!\auth()->user()->ability('admin','manage_post,show_posts')) {
                             return redirect('admin/index');
                         }*/
+
         $keyword = (isset(\request()->keyword) && \request()->keyword != '') ? \request()->keyword : null;
         $categoryId = (isset(\request()->category_id) && \request()->category_id != '') ? \request()->category_id : null;
         $status = (isset(\request()->status) && \request()->status != '') ? \request()->status : null;
@@ -63,15 +64,15 @@ class PostsController extends Controller
 
        $posts= $posts->orderBy($sort_by,$order_by);
        $posts= $posts->paginate($limit_by);
-       
-       
-       
-       
-       
-       
-       
-       
-        $categories = Category::orderBy('id','desc')->pluck('name','id'); 
+
+
+
+
+
+
+
+
+        $categories = Category::orderBy('id','desc')->pluck('name','id');
         return view('backend.posts.index',compact('posts','categories'));
 
     }
@@ -86,7 +87,7 @@ class PostsController extends Controller
             /*if(!\auth()->user()->ability('admin','create_posts')){
                 return redirect('admin/index');
             }*/
-        $categories = Category::orderBy('id','desc')->pluck('name','id'); 
+        $categories = Category::orderBy('id','desc')->pluck('name','id');
         return view('backend.posts.create',compact('categories'));
 
     }
@@ -108,7 +109,7 @@ class PostsController extends Controller
                 'status'                =>  'required',
                 'comment_able'          => 'required',
                 'category_id'           => 'required',
-                'images.*'              => 'nullable|mimes:jpg,jpeg,png,gif|max:20000',    
+                'images.*'              => 'nullable|mimes:jpg,jpeg,png,gif|max:20000',
             ]);
         if($validate->fails()){
             return redirect()->back()->withErrors($validate)->withInput();
@@ -130,7 +131,7 @@ class PostsController extends Controller
                 $file_size = $file->getSize();
                 $file_type = $file->getMimeType();
                 $path = public_path('assets/post/'.$filename);
-                
+
                 Image::make($file->getRealPath())->resize(800,null,function($constraint){
                     $constraint->aspectRatio();
                 })->save($path,100);
@@ -142,7 +143,7 @@ class PostsController extends Controller
                 $i++;
 
             }
-        } 
+        }
 
         if($request->status == 1){
             Cache::forget('recent_posts');
@@ -181,7 +182,7 @@ class PostsController extends Controller
         /* if(!\auth()->user()->ability('admin','update_posts')){
                 return redirect('admin/index');
             }*/
-            $categories = Category::orderBy('id','desc')->pluck('name','id'); 
+            $categories = Category::orderBy('id','desc')->pluck('name','id');
         $post = Post::with(['media'])->whereId($id)->wherePostType('post')->first();
         return view('backend.posts.edit',compact('categories','post'));
 
@@ -200,14 +201,14 @@ class PostsController extends Controller
                 return redirect('admin/index');
             }*/
          $validate = Validator::make($request->all(),[
-             
+
 
             'title'                 =>'required',
             'description'           => 'required|min:50',
             'status'                =>  'required',
             'comment_able'          => 'required',
             'category_id'           => 'required',
-            'images.*'              => 'nullable|mimes:jpg,jpeg,png,gif|max:20000',    
+            'images.*'              => 'nullable|mimes:jpg,jpeg,png,gif|max:20000',
 
         ]);
      if($validate->fails()){
@@ -232,7 +233,7 @@ class PostsController extends Controller
                 $file_size = $file->getSize();
                 $file_type = $file->getMimeType();
                 $path = public_path('assets/post/'.$filename);
-                
+
                 Image::make($file->getRealPath())->resize(800,null,function($constraint){
                    $constraint->aspectRatio();
                 })->save($path,100);
@@ -256,7 +257,7 @@ class PostsController extends Controller
     }
 
 
-  
+
     /**
      * Remove the specified resource from storage.
      *
@@ -268,7 +269,7 @@ class PostsController extends Controller
             /* if(!\auth()->user()->ability('admin','delete_posts')){
                     return redirect('admin/index');
                 }*/
-      
+
         $post = Post::whereId($id)->wherePostType('post')->first();
         if($post){
          if($post->media->count() > 0){
@@ -287,11 +288,11 @@ class PostsController extends Controller
          return redirect()->route('admin.posts.index')->with([
             'message'  => ' something was wrong',
             'alert-type' => 'danger',
-         ]); 
+         ]);
     }
 
     public function removeImage(Request $request){
-        
+
             /*  if(!\auth()->user()->ability('admin','delete_posts')){
                     return redirect('admin/index');
                 }*/

@@ -20,7 +20,7 @@
         </div>
         <div class="col-2">
             <div class="form-group">
-                {!! Form::select('orderby',['' => '---' ,'asc' => 'Ascending' , 'desc' => 'Descending ']  ,old('category_id',request()->input('category_id')),['class' => 'form-control']) !!}
+                {!! Form::select('order_by', ['' => '---', 'asc' => 'Ascending', 'desc' => 'Descending'], old('order_by', request()->input('order_by')), ['class' => 'form-control']) !!}
             </div>
         </div>
         <div class="col-1">

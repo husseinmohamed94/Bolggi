@@ -43,9 +43,10 @@ class PostCategoriesController extends Controller
                         }
                 class EntrustAbility
 
-                        if (!\auth()->user()->ability('admin','manage_post,show_posts')) {
+                        if (!\auth()->user()->ability('admin','manage_post_categories,show_post_categories')) {
                             return redirect('admin/index');
                         }*/
+
         $keyword = (isset(\request()->keyword) && \request()->keyword != '') ? \request()->keyword : null;
         $status = (isset(\request()->status) && \request()->status != '') ? \request()->status : null;
         $sort_by = (isset(\request()->sort_by) && \request()->sort_by != '') ? \request()->sort_by : 'id';

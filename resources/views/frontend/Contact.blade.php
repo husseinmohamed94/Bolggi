@@ -74,15 +74,15 @@
                             <i class="icon-location-pin icons"></i>
                             <div class="content">
                                 <span>address:</span>
-                                <p>666 5th Ave New York, NY, United</p>
+                                <p>{!! getSettingsOf('address') !!}</p>
                             </div>
                         </div>
 
                         <div class="single__address">
                             <i class="icon-phone icons"></i>
                             <div class="content">
-                                <span>Phone Number:</span>
-                                <p>716-298-1822</p>
+                                <span>Phone Number:</span> 
+                                <p>{!! getSettingsOf('phone_number') !!}</p>
                             </div>
                         </div>
 
@@ -90,15 +90,15 @@
                             <i class="icon-envelope icons"></i>
                             <div class="content">
                                 <span>Email address:</span>
-                                <p>716-298-1822</p>
+                                <p>{!! getSettingsOf('site_email') !!}</p>
                             </div>
                         </div>
 
                         <div class="single__address">
                             <i class="icon-globe icons"></i>
                             <div class="content">
-                                <span>website address:</span>
-                                <p>716-298-1822</p>
+                                <span> site website</span>
+                                <p>{!! getSettingsOf('site_title') !!}</p>
                             </div>
                         </div>
 

@@ -9,6 +9,7 @@
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="adminId" content="{{ auth()->check() ? auth()->id() : '' }}">
 
     <title>{{ config('app.name', 'Laravel') }} - Dashbord</title>
 
@@ -29,6 +30,7 @@
 
 
     @yield('style')
+    @livewireStyles
 </head>
 <body id="page-top">
     <div id="app">
@@ -154,14 +156,10 @@
     <script src="{{asset('backend/vendor/summernote/summernote-bs4.min.js')}}"></script>
 
 
-    <!-- Page level plugins -->
-    <script src="{{asset('backend/vendor/chart.js/Chart.min.js')}}"></script>
-
-    <!-- Page level custom scripts -->
-    <script src="{{asset('backend/js/demo/chart-area-demo.js')}}"></script>
-    <script src="{{asset('backend/js/demo/chart-pie-demo.js')}}"></script>
     <script src="{{asset('backend/js/custom.js')}}"></script>
 
 @yield('script')
+@livewireScripts
+@stack('scripts')
 </body>
 </html>

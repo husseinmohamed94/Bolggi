@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Models\Role;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Cache;
@@ -12,6 +13,7 @@ use Stevebauman\Purify\Facades\Purify;
 use Intervention\Image\Facades\Image;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Support\Str;
 
 class UsersController extends Controller
 {
@@ -122,30 +124,22 @@ class UsersController extends Controller
 
         if($user_image = $request->file('user_image') ){
            
-                $filename = $post->slug.'-'.time().'-'.$i. '.' .$file->getClientOriginalExtension();
-                $file_size = $file->getSize();
-                $file_type = $file->getMimeType();
-                $path = public_path('assets/post/'.$filename);
+                $filename = Str::slug($request->username). '.' .$user_image->getClientOriginalExtension();
+               
+                $path = public_path('assets/users/'.$filename);
                 
-                Image::make($file->getRealPath())->resize(800,null,function($constraint){
+                Image::make($user_image->getRealPath())->resize(300,300,function($constraint){
                     $constraint->aspectRatio();
                 })->save($path,100);
-                $post->media()->create([
-                    'file_name'     => $filename,
-                    'file_size'     => $file_size,
-                    'file_type'     => $file_type,
-                ]);
-                $i++;
+                $data['user_image']     = $filename ;
 
-            }
         } 
 
-        if($request->status == 1){
-            Cache::forget('recent_users');
-        }
+        $user = User::create($data);
+        $user->attachRole(Role::whereName('user')->first()->id);
 
         return redirect()->route('admin.users.index')->with([
-            'message'  => 'post created Successfully',
+            'message'  => 'users created Successfully',
             'alert-type' => 'success',
         ]);
     }
@@ -161,9 +155,14 @@ class UsersController extends Controller
             /*  if(!\auth()->user()->ability('admin','display_users')){
                     return redirect('admin/index');
                 }*/
-        $post = Post::with(['media','category','user','comments'])->whereId($id)->wherePostType('post')->first();
-        return view('backend.users.show',compact('post'));
-
+                $user = User::whereId($id)->withCount('posts')->first();
+                if($user){
+                    return view('backend.users.show',compact('user'));
+                }
+                return redirect()->route('admin.users.index')->with([
+                    'message'  => ' something was wrong',
+                    'alert-type' => 'danger',
+                 ]);
     }
 
     /**
@@ -177,10 +176,15 @@ class UsersController extends Controller
         /* if(!\auth()->user()->ability('admin','update_users')){
                 return redirect('admin/index');
             }*/
-            $categories = Category::orderBy('id','desc')->pluck('name','id'); 
-        $post = Post::with(['media'])->whereId($id)->wherePostType('post')->first();
-        return view('backend.users.edit',compact('categories','post'));
-
+        
+        $user = User::whereId($id)->first();
+        if($user){
+            return view('backend.users.edit',compact('user'));
+        }
+        return redirect()->route('admin.users.index')->with([
+            'message'  => ' something was wrong',
+            'alert-type' => 'danger',
+         ]);
     }
 
     /**
@@ -195,60 +199,62 @@ class UsersController extends Controller
         /* if(!\auth()->user()->ability('admin','update_users')){
                 return redirect('admin/index');
             }*/
-         $validate = Validator::make($request->all(),[
-             
+            $validate = Validator::make($request->all(),[
+                'name'                 =>'required',
+                'username'             => 'required|max:20|unique:users,username,'.$id,
+                'email'                =>  'required|email|unique:users,email,'.$id,
+                'mobile'               => 'required|numeric|unique:users,mobile,'.$id,
+                'status'               => 'required',
+                'password'             =>'nullable|min:8',
+            ]);
+        if($validate->fails()){
+            return redirect()->back()->withErrors($validate)->withInput();
+        }
 
-            'title'                 =>'required',
-            'description'           => 'required|min:50',
-            'status'                =>  'required',
-            'comment_able'          => 'required',
-            'category_id'           => 'required',
-            'images.*'              => 'nullable|mimes:jpg,jpeg,png,gif|max:20000',    
+        $user =User::whereId($id)->first();
+        if($user){
+        $data['name']              = $request->name;
+        $data['username']          = $request->username;
+        $data['email']             = $request->email;
+        $data['mobile']            = $request->mobile;
+        if(trim($request->password) != ''){
+            $data['password']          = bcrypt($request->password);
 
-        ]);
-     if($validate->fails()){
-         return redirect()->back()->withErrors($validate)->withInput();
-     }
+        }
+        $data['status']            = $request->status;
+        $data['bio']               = $request->bio;
+        $data['receive_email']     = $request->receive_email;
 
-     $post = Post::whereId($id)->wherePostType('post')->first();
-     if($post){
-        $data['title']              = $request->title;
-        $data['slug']              = null;
 
-        $data['description']        = Purify::clean($request->description);
-        $data['status']             = $request->status;
-        $data['comment_able']       = $request->comment_able;
-        $data['category_id']        = $request->category_id;
-        $post->update($data);
-
-        if($request->images && count($request->images) > 0 ){
-            $i = 1;
-            foreach($request->images as $file){
-                $filename = $post->slug.'-'.time().'-'.$i. '.' .$file->getClientOriginalExtension();
-                $file_size = $file->getSize();
-                $file_type = $file->getMimeType();
-                $path = public_path('assets/post/'.$filename);
-                
-                Image::make($file->getRealPath())->resize(800,null,function($constraint){
-                   $constraint->aspectRatio();
-                })->save($path,100);
-                $post->media()->create([
-                   'file_name'     => $filename,
-                   'file_size'     => $file_size,
-                   'file_type'     => $file_type,
-                ]);
-                $i++;
-                }
+        if($user_image = $request->file('user_image') ){
+           
+            if($user->user_image != ''){
+                if(File::exists('assets/users/' .$user->user_image )){
+                    unlink('assets/users/' . $user->user_image);
+                    }
             }
-            return redirect()->route('admin.users.index')->with([
-                'message'  => 'post update Successfully',
-                'alert-type' => 'success',
-             ]);
-     }
-     return redirect()->route('admin.users.index')->with([
-        'message'  => ' something was wrong',
-        'alert-type' => 'danger',
-     ]);
+
+                $filename = Str::slug($request->username). '.' .$user_image->getClientOriginalExtension();   
+                $path = public_path('assets/users/'.$filename);
+                
+                Image::make($user_image->getRealPath())->resize(300,300,function($constraint){
+                    $constraint->aspectRatio();
+                })->save($path,100);
+                $data['user_image']     = $filename ;
+
+        } 
+
+        $user->update($data);
+
+        return redirect()->route('admin.users.index')->with([
+            'message'  => 'users created Successfully',
+            'alert-type' => 'success',
+        ]);
+        }
+        return redirect()->route('admin.users.index')->with([
+            'message'  => ' something was wrong',
+            'alert-type' => 'danger',
+         ]); 
     }
 
 
@@ -265,18 +271,17 @@ class UsersController extends Controller
                     return redirect('admin/index');
                 }*/
       
-        $post = Post::whereId($id)->wherePostType('post')->first();
-        if($post){
-         if($post->media->count() > 0){
-             foreach($post->media as $media){
-                if(File::exists('assets/post/' .$media->file_name )){
-                    unlink('assets/post/' . $media->file_name);
+        $user =User::whereId($id)->first();
+        if($user){
+        
+                if(File::exists('assets/users/' . $user->user_image )){
+                    unlink('assets/users/' . $user->user_image);
                     }
-                 }
-             }
-             $post->delete();
+                 
+             
+             $user->delete();
              return redirect()->route('admin.users.index')->with([
-                'message'  => 'post deleted Successfully',
+                'message'  => 'users deleted Successfully',
                 'alert-type' => 'success',
              ]);
          }
@@ -291,16 +296,19 @@ class UsersController extends Controller
             /*  if(!\auth()->user()->ability('admin','delete_users')){
                     return redirect('admin/index');
                 }*/
-        $media = PostMedia::whereId($request->media_id)->first();
-        if($media){
-            if(File::exists('assets/post/' .$media->file_name )){
-                unlink('assets/post/' . $media->file_name);
+        $user =User::whereId($request->user_id)->first();
+        if($user){
+            if($user->user_image != ''){
+            if(File::exists('assets/users/' .$user->user_image )){
+                unlink('assets/users/' .$user->user_image);
             }
-            $media->delete();
-            return true;
         }
-        return false;
+            $user->user_image = null;
+            $user->save();
+            return 'true';
+        }
+        
+        return 'false';
     }
-
-
+    
 }

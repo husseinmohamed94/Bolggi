@@ -29,10 +29,10 @@
                             <td>{{$message->created_at->format('d-m-Y:i a')}}</td>
                             <td>
                                 <div class="btn-group">
-                                <a href="{{route('admin.contact_us.show',$message->id)}}" class="btn-btn-primary"><i class="fa fa-eye"></i></a>
+                                <a href="{{route('admin.contact_us.show',$message->id)}}" class="btn btn-primary"><i class="fa fa-eye"></i></a>
                                 <a href="javascript:void(0)"
                                 onclick="if(confirm('Are you sure to delete this message')){document.getElementById('message-delete-{{$message->id}}').submit();}else{return fales;} "
-                                class="btn-btn-danger"><i class="fa fa-trash"></i></a>
+                                class="btn btn-danger"><i class="fa fa-trash"></i></a>
                                 <form action="{{route('admin.contact_us.destroy',$message->id)}}" method="POST" id="message-delete-{{$message->id}}">
                                     @csrf
                                     @method('DELETE')

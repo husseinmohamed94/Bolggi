@@ -38,10 +38,10 @@
                             <td>{{$page->created_at->format('d-m-Y:i a')}}</td>
                             <td>
                                 <div class="btn-group">
-                                <a href="{{route('admin.pages.edit',$page->id)}}" class="btn-btn-primary"><i class="fa fa-edit"></i></a>
+                                <a href="{{route('admin.pages.edit',$page->id)}}" class="btn btn-primary"><i class="fa fa-edit"></i></a>
                                 <a href="javascript:void(0)"
                                 onclick="if(confirm('Are you sure to delete this page')){document.getElementById('page-delete-{{$page->id}}').submit();}else{return fales;} "
-                                class="btn-btn-danger"><i class="fa fa-trash"></i></a>
+                                class="btn btn-danger"><i class="fa fa-trash"></i></a>
                                 <form action="{{route('admin.pages.destroy',$page->id)}}" method="POST" id="page-delete-{{$page->id}}">
                                     @csrf
                                     @method('DELETE')
